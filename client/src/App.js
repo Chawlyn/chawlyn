@@ -6,7 +6,10 @@ import VendorSignup from './pages/VendorSignup';
 import CustomerSignup from './pages/CustomerSignup';
 import VendorDetail from './pages/VendorDetail';
 import FoodItemDetail from './pages/FoodItemDetail';
-import Cart from './pages/Cart'; // Import the Cart component
+import Cart from './pages/Cart';
+import OrderConfirmation from './pages/OrderConfirmation';
+import Checkout from './pages/Checkout';
+import OrderTracking from './pages/OrderTracking'; // Import OrderTracking component
 import Navbar from './components/Navbar';
 
 function App() {
@@ -20,7 +23,10 @@ function App() {
         <Route path="/customer-signup" element={<CustomerSignup />} />
         <Route path="/vendors/:vendorId" element={<VendorDetail />} />
         <Route path="/items/:itemId" element={<FoodItemDetail />} />
-        <Route path="/cart" element={<Cart />} /> {/* Cart Page Route */}
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/order-tracking" element={<OrderTracking />} /> {/* Order Tracking Route */}
       </Routes>
     </Router>
   );
