@@ -10,10 +10,10 @@ const Navbar = () => {
           Chaw Republic
         </Link>
         <div className="hidden md:flex space-x-4">
+          <Link to="/explore" className="text-white hover:text-accent">Explore</Link>
           <Link to="/vendor-signup" className="text-white hover:text-accent">Vendor Signup</Link>
           <Link to="/customer-signup" className="text-white hover:text-accent">Customer Signup</Link>
         </div>
-        {/* Mobile Menu */}
         <div className="md:hidden">
           <button className="text-white">Menu</button>
         </div>
