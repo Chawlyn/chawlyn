@@ -3,13 +3,14 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 const VendorDetail = () => {
-  const { vendorId } = useParams();  // Retrieve vendor ID from URL parameters
+  // Simulating data that might be fetched based on vendor ID
+  const { vendorId } = useParams();
 
-  // Example data (this should ideally come from an API)
+  // Example data (replace with real data from API)
   const vendor = {
     id: vendorId,
     name: "Mama's Kitchen",
-    logo: "/images/vendor-logo.jpg",  // Placeholder image
+    logo: "/images/vendor-logo.jpg",
     hours: "9 AM - 9 PM",
     location: "123 Foodie Street, Port Harcourt",
     rating: 4.8,
@@ -26,12 +27,12 @@ const VendorDetail = () => {
 
   const addToCart = (item) => {
     console.log(`Added ${item.name} to cart!`);
-    // Implement your actual add to cart functionality here
+    // Add to cart functionality here
   };
 
   return (
     <div className="p-6 bg-background min-h-screen">
-      {/* Vendor Information */}
+      {/* Vendor Info Section */}
       <div className="flex items-center mb-6">
         <img src={vendor.logo} alt={vendor.name} className="w-24 h-24 rounded-full mr-4" />
         <div>
