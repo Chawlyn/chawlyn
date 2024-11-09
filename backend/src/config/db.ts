@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { environment } from './env';
+import environment from './env';
 
 const MONGO_URI = environment.MONGO_URI;
 

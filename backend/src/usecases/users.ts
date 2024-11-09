@@ -5,55 +5,31 @@ import { ErrorResponse } from '../utils/errorResponse';
 export class User {
   // create a new user
   static async create(user:IUser) {
-    try {
-      return await UserRepository.createUser(user);
-    } catch (error: any) {
-      throw new ErrorResponse(error.message, 500);
-    }
+    return await UserRepository.createUser(user);
   }
 
   // get a user by email
   static async userByEmail(email:string) {
-    try {
-      return await UserRepository.getUserByEmail(email);
-    } catch (error: any) {
-      throw new ErrorResponse(error.message, 500);
-    }
+    return await UserRepository.getUserByEmail(email);
   }
 
   // get all users
   static async fetchUsers() {
-    try {
-      return await UserRepository.getUsers();
-    } catch (error: any) {
-      throw new ErrorResponse(error.message, 500);
-    }
+    return await UserRepository.getUsers();
   }
 
   // delete a user
   static async deleteUser(id:string) {
-    try {
-      return await UserRepository.deleteUser(id);
-    } catch (error: any) {
-      throw new ErrorResponse(error.message, 500);
-    }
+    return await UserRepository.deleteUser(id);
   }
 
   // update a user
   static async update(id:string, update: IUser) {
-    try {
-      return await UserRepository.updateUser(id, update);
-    } catch (error: any) {
-      throw new ErrorResponse(error.message, 500);
-    }
+    return await UserRepository.updateUser(id, update);
   }
 
   // get a user by id
   static async userById(id:string) {
-    try {
-      return await UserRepository.getUserById(id);
-    } catch (error: any) {
-      throw new ErrorResponse(error.message, 500);
-    }
+    return await UserRepository.getUserById(id);
   }
 };
