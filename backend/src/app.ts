@@ -32,7 +32,7 @@ app.get('/', asyncHandler(async (req: Request, res: Response) => {
   return res.status(200).json({ messgae: "Welcome"})
 }));
 
-app.use('/api/v1', authRouter);
+app.use('/api/v1/auth', authRouter);
 
 // Error Handler
 app.use(errorHandler)

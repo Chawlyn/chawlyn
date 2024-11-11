@@ -1,27 +1,56 @@
-import { Strategy } from "passport-google-oauth2";
-import passport from "passport";
-import environment from "./env";
-import { ErrorResponse } from "../utils/errorResponse";
+// src/config/passport.ts
+import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { comparePassword } from '../utils/hash';
+import User from '../models/user';
+import environment from './env';
 
-if (!environment.CLIENT_ID || !environment.CLIENT_SECRET) {
-  throw new ErrorResponse("Client ID or client Secret is missing", 500)
-}
+passport.use(new LocalStrategy({ usernameField: 'email' }, async (email:string, password:string, done:any) => {
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return done(null, false, { message: 'Invalid credentials' });
+    }
 
-passport.use(new Strategy({
-    clientID: environment.CLIENT_ID,
-    clientSecret: environment.CLIENT_SECRET,
-    callbackURL: 'http://localhost:4080/api/v1/auth/google/callback',
-    passReqToCallback: true
-  },
-  async function (req: any, accessToken: string, refreshToken: string, profile: any, done: (err: any, profile: any) => void) {
-    return done(null, profile)
+    const isMatch = await comparePassword(password, user.password!);
+    if (!isMatch) {
+      return done(null, false, { message: 'Invalid credentials' });
+    }
+
+    return done(null, user);
+  } catch (err) {
+    return done(err);
   }
-));
+}));
 
-passport.serializeUser(function (user:any, done) {
-  done(null, user);
-});
+passport.use(new GoogleStrategy({
+  clientID: environment.CLIENT_ID!,
+  clientSecret: environment.CLIENT_SECRET!,
+  callbackURL: 'http://localhost:4080/api/v1/auth/google/callback',
+},
+async (token: string, tokenSecret: string, profile: any, done: any) => {
+  try {
+    console.log('Google profile:', profile); // Logging to check profile data
 
-passport.deserializeUser(function (user:any, done) {
-  done(null, user);
-})
+    let user = await User.findOne({ googleId: profile.id });
+
+    if (user) {
+      return done(null, user);
+    } else {
+      user = new User({
+        googleId: profile.id,
+        email: profile.emails?.[0].value,
+        username: profile.displayName || "Anonymous",
+      });
+
+      await user.save();
+      return done(null, user);
+    }
+  } catch (error) {
+    console.error('Error during Google authentication:', error);
+    return done(error); // Pass error to Passport's done callback
+  }
+}));
+
+export default passport;

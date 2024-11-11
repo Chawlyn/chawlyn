@@ -9,25 +9,25 @@ export class UserRepository {
   // create a new user
   static async createUser(values: IUser) {
     try {
-
-      const newToken = await generateToken(values.email);
-
-      const hash = await hashPassword(values.password);
+      // Hash password only if it's provided (for email signups)
+      const hash = values.password ? await hashPassword(values.password) : undefined;
       
+      const newToken = await generateToken(values.email);
+  
       const user = await new User({
         username: values.username,
         email: values.email,
         role: values.role,
-        password: hash,
+        password: hash,  // This will be undefined for Google signups
         token: newToken
       }).save();
+  
       return user.toObject();
     } catch (error: any) {
       throw new ErrorResponse(error.message, 500);
     }
-  }
+  }  
   
-
   // get all users
   static async getUsers() {
     try {
@@ -40,7 +40,7 @@ export class UserRepository {
   // get a user by email
   static async getUserByEmail(email:string) {
     try {
-      return await User.findOne({ email }).select('+salt +password')
+      return await User.findOne({ email })
     } catch (error:any) {
       throw new ErrorResponse(error.message, 500)
     }
