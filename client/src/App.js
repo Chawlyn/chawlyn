@@ -7,9 +7,13 @@ import CustomerSignup from './pages/CustomerSignup';
 import VendorDetail from './pages/VendorDetail';
 import FoodItemDetail from './pages/FoodItemDetail';
 import Cart from './pages/Cart';
-import OrderConfirmation from './pages/OrderConfirmation';
 import Checkout from './pages/Checkout';
-import OrderTracking from './pages/OrderTracking'; // Import OrderTracking component
+import OrderConfirmation from './pages/OrderConfirmation';
+import OrderTracking from './pages/OrderTracking';
+import CustomerProfile from './pages/CustomerProfile';
+import OrderDetail from './pages/OrderDetail';
+import CustomerReviews from './pages/CustomerReviews'; // Import CustomerReviews component
+
 import Navbar from './components/Navbar';
 
 function App() {
@@ -26,7 +30,14 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
-        <Route path="/order-tracking" element={<OrderTracking />} /> {/* Order Tracking Route */}
+        <Route path="/order-tracking" element={<OrderTracking />} />
+        
+        {/* Customer Profile and Order History Routes */}
+        <Route path="/profile" element={<CustomerProfile />} /> 
+        <Route path="/order/:orderId" element={<OrderDetail />} />
+
+        {/* Customer Reviews Route */}
+        <Route path="/reviews" element={<CustomerReviews />} /> {/* Customer Reviews Page */}
       </Routes>
     </Router>
   );
