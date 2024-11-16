@@ -1,36 +1,36 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const CustomerSignup = () => {
+const SignUp = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    role: 'customer', // Role to differentiate sign-up type
+    role: 'customer', // Default role, can be 'vendor' if using dropdown
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/v1/auth/register', formData); // Backend endpoint for registration
-      alert('Customer sign-up successful!');
+      const response = await axios.post('/auth/signup', formData); // Replace with actual backend URL
+      alert('Sign up successful!');
       console.log(response.data);
-      // Redirect to login or another page after successful sign-up
+      // Redirect to login page or other action after successful signup
     } catch (error) {
-      console.error('Customer sign-up error:', error.response?.data || error.message);
-      alert('Customer sign-up failed. Please try again.');
+      console.error('Sign up error:', error.response?.data || error.message);
+      alert('Sign up failed. Please try again.');
     }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-background">
       <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-primary mb-4 text-center">Customer Sign Up</h1>
+        <h1 className="text-2xl font-bold text-primary mb-4 text-center">Sign Up</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-gray-700">Name</label>
@@ -74,4 +74,4 @@ const CustomerSignup = () => {
   );
 };
 
-export default CustomerSignup;
+export default SignUp;

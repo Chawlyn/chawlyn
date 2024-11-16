@@ -1,13 +1,14 @@
-// src/pages/VendorSignup.js
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const VendorSignup = () => {
   const [formData, setFormData] = useState({
+    businessName: '',
+    businessAddress: '',
     name: '',
     email: '',
     password: '',
-    businessName: '',
-    businessAddress: '',
+    role: 'vendor', // Role to differentiate sign-up type
   });
 
   const handleChange = (e) => {
@@ -15,10 +16,17 @@ const VendorSignup = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Submit form logic here (e.g., API call)
-    console.log('Vendor Signup Data:', formData);
+    try {
+      const response = await axios.post('/api/v1/auth/register', formData); // Backend endpoint for registration
+      alert('Vendor sign-up successful!');
+      console.log(response.data);
+      // Redirect to login or another page after successful sign-up
+    } catch (error) {
+      console.error('Vendor sign-up error:', error.response?.data || error.message);
+      alert('Vendor sign-up failed. Please try again.');
+    }
   };
 
   return (
@@ -81,7 +89,7 @@ const VendorSignup = () => {
               required
             />
           </div>
-          <button type="submit" className="bg-primary text-white py-2 px-4 rounded hover:bg-secondary w-full">
+          <button type="submit" className="bg-primary text-white py-2 px-4 rounded hover:bg-secondary transition w-full">
             Sign Up
           </button>
         </form>
