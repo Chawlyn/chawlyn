@@ -6,7 +6,8 @@ import asyncHandler from "../middleware/async";
 import { ErrorResponse } from '../utils/errorResponse';
 import { loginUser, registerUser, resetLink } from '../validators/user';
 import passport from 'passport';
-import { generateOTP } from './OTP';
+import { generateOTP, verifyOTP } from './OTP';
+import { sendSMSVerificationOTP } from '../utils/sendSMS';
 
 export const register = asyncHandler(async (req: Request, res: Response, next:NextFunction) => {
 
@@ -17,7 +18,7 @@ export const register = asyncHandler(async (req: Request, res: Response, next:Ne
     throw next(new ErrorResponse(error.details[0].message, 400));
   }
 
-  const { email, password, confirmPassword, username } = value;
+  const { email, password, confirmPassword, username, phoneNumber } = value;
 
   if (password !== confirmPassword) {
     throw next(new ErrorResponse("Passwords don't match", 400));
@@ -32,37 +33,45 @@ export const register = asyncHandler(async (req: Request, res: Response, next:Ne
   const user = await User.create(value);
 
   // Generate and save OTP for the user’s email verification
-  const otp = await generateOTP(user._id, 'signup');
+  const otp = await generateOTP(user._id);
+
+  // Send OTP to user's email or phone number
+  if (email) {
+    // await sendEmailVerificationOTP(user.email, otp);
+  } else if (phoneNumber) {
+    await sendSMSVerificationOTP(phoneNumber, otp);
+  } else {
+    throw next(new ErrorResponse("Either email or phone number is required for verification", 400));
+  }
 
   return res.status(201).json({
     success: true,
     message: "User registered. Please verify OTP to complete registration.",
-    otp, // For testing only. Remove this in production.
   });
 });
 
-export const verifyOTP = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const { userId, otp } = req.body;
+// Add a new function to verify OTP
+export const verifyOTPCode = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const { otp } = req.body;
 
-  // Find the OTP record by userId and otp
-  const otpRecord = await OTP.findOne({ userId, otp });
-
-  if (!otpRecord) {
-    return next(new ErrorResponse("Invalid or expired OTP", 400));
+  if (!otp) {
+    throw next(new ErrorResponse("OTP is required", 400));
   }
 
-  if (otpRecord.expiry < Date.now()) {
-    await otpRecord.delete(); // Clean up expired OTPs
-    return next(new ErrorResponse("OTP expired", 400));
+  const isVerified = await verifyOTP(otp);
+  if (!isVerified) {
+    throw next(new ErrorResponse("Invalid OTP", 400));
   }
 
-  await otpRecord.delete(); // Remove OTP after successful verification
+  console.log(isVerified);
+  // const user = await User.userById(isVerified.userId)
+  // user._id = true;
+  // await user.save();
 
-  // If OTP is valid, take action based on the flow type
-  // If it's a signup, mark the user as verified or activate the account
-  // If it's a password reset, allow the user to reset their password
-
-  return res.status(200).json({ success: true, message: "OTP verified successfully" });
+  return res.status(200).json({
+    success: true,
+    message: "User verified successfully",
+  });
 });
 
 export const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -121,9 +130,10 @@ export function oAuth(req: Request, res: Response, next: NextFunction) {
       // Extract email and name from the authenticated user (assuming it's provided by Google)
       const email = user.email;
       const username = user.username;
+      const isVerified = user.emailVerified;
 
       // Ensure email and name exist
-      if (!email || !username) {
+      if (!email || !username || !isVerified) {
         throw next(new ErrorResponse('Missing email or name from user data', 400));
       }
 

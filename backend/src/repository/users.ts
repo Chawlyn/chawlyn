@@ -12,6 +12,11 @@ export class UserRepository {
       // Hash password only if it's provided (for email signups)
       const hash = values.password ? await hashPassword(values.password) : undefined;
       
+      // Automatically verify email for google signup
+      const emailVerified = values.emailVerified ? true : undefined;
+
+      const phoneVerified = values.phoneVerified ? true : undefined;
+
       const newToken = await generateToken(values.email);
   
       const user = await new User({
@@ -19,7 +24,10 @@ export class UserRepository {
         email: values.email,
         role: values.role,
         password: hash,  // This will be undefined for Google signups
-        token: newToken
+        token: newToken,
+        phomeNumber: values.phoneNumber,
+        emailVerified,
+        phoneVerified
       }).save();
   
       return user.toObject();

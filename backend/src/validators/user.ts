@@ -5,7 +5,8 @@ export const registerUser = Joi.object({
   password: Joi.string().min(6).message("Password must be at least 6 characters").required(),
   confirmPassword: Joi.string().min(6).message("Password must be at least 6 characters").required(),
   username: Joi.string().required(),
-  role: Joi.string().valid('user', 'admin', 'seller')
+  role: Joi.string().valid('user', 'admin', 'seller'),
+  phoneNumber: Joi.number().required()
 });
 
 export const loginUser = Joi.object({

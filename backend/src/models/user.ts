@@ -8,6 +8,9 @@ export interface IUser extends Document {
   token: string;
   _id: string;
   googleId: string;
+  phoneNumber: number;
+  emailVerified?: boolean;
+  phoneVerified?: boolean;
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -22,6 +25,9 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   googleId: { type: String, unique: true },
   token: { type: String, select: false },
+  phoneNumber: { type:Number, required: true},
+  emailVerified: { type: Boolean },
+  phoneVerified: { type: Boolean }
 },
 {
   toJSON: {
