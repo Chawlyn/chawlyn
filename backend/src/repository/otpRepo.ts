@@ -5,9 +5,8 @@ import crypto from 'crypto';
 export class OTPRepository {
 
   // create otp
-  // create otp
   static async createOTP(userId: string) {
-    const otp = crypto.randomInt(100000, 999999).toString(); // Generates a 6-digit OTP
+    const otp = crypto.randomInt(100000, 999999); // Generates a 6-digit OTP
     const expiry = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes for both
 
     const otpRecord = new OTP({
@@ -21,7 +20,7 @@ export class OTPRepository {
   }
 
   // get otp
-  static async getOTP(otp: string) {
+  static async getOTP(otp: number) {
     const otpData = await OTP.findOne({ otp });
     if (!otpData) {
       throw new ErrorResponse('Invalid OTP', 400);
@@ -36,23 +35,18 @@ export class OTPRepository {
   }
   
   // update otp
-  static async updateOTP(id: string, update: Partial<IOTP>) {
-    if (!update.otp) {
-      // If otp is not provided, you may choose to throw an error or use some default behavior.
-      throw new ErrorResponse('OTP value is required to update', 400);
-    }
-  
+  static async updateOTP(id: string) {
     // Generate a new OTP and set expiry
-    update.otp = crypto.randomInt(100000, 999999).toString();
-    update.expiry = Date.now() + 10 * 60 * 1000;
-  
+    const otp = crypto.randomInt(100000, 999999);
+    const expiry = Date.now() + 10 * 60 * 1000;
+
     // Directly use findOneAndUpdate
-    const otpData = await OTP.findOneAndUpdate({ userId: id }, update, { new: true });
-  
+    const otpData = await OTP.findOneAndUpdate({ userId: id }, { otp, expiry }, { new: true, runValidators: true });
+
     if (!otpData) {
       throw new ErrorResponse("OTP record not found for this user", 404);
     }
-  
+
     return otpData;
-  }  
+  } 
 }

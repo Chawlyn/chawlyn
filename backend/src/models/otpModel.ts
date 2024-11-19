@@ -1,14 +1,14 @@
 import { Schema, Document, model, Types } from "mongoose";
 
 export interface IOTP extends Document {
-  otp: string;
+  otp: number;
   userId: Types.ObjectId;
   expiry: number;
 }
 
 const otpSchema = new Schema<IOTP>({
   otp: {
-    type: String,
+    type: Number,
     required: true,
   },
   userId: {
