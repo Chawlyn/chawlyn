@@ -7,9 +7,14 @@ const VendorSignup = () => {
     businessAddress: '',
     name: '',
     email: '',
+    phoneNumber: '',
     password: '',
-    role: 'vendor', // Role to differentiate sign-up type
+    confirmPassword: '',
+    role: 'vendor',
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,11 +23,15 @@ const VendorSignup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match.');
+      return;
+    }
+
     try {
-      const response = await axios.post('/api/v1/auth/register', formData); // Backend endpoint for registration
-      alert('Vendor sign-up successful!');
+      const response = await axios.post('/api/v1/auth/register', formData);
+      alert('Vendor sign-up successful! Please verify your phone number or email.');
       console.log(response.data);
-      // Redirect to login or another page after successful sign-up
     } catch (error) {
       console.error('Vendor sign-up error:', error.response?.data || error.message);
       alert('Vendor sign-up failed. Please try again.');
@@ -30,7 +39,7 @@ const VendorSignup = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-background">
+    <div className="flex justify-center items-center min-h-screen bg-background py-12"> {/* Added py-12 for vertical spacing */}
       <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-primary mb-4 text-center">Vendor Sign Up</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -79,15 +88,55 @@ const VendorSignup = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Password</label>
+            <label className="block text-gray-700">Phone Number</label>
             <input
-              type="password"
-              name="password"
-              value={formData.password}
+              type="tel"
+              name="phoneNumber"
+              value={formData.phoneNumber}
               onChange={handleChange}
               className="w-full p-2 border rounded"
               required
             />
+          </div>
+          <div>
+            <label className="block text-gray-700">Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-2 text-gray-600"
+              >
+                {showPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="block text-gray-700">Confirm Password</label>
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-2 top-2 text-gray-600"
+              >
+                {showConfirmPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
           </div>
           <button type="submit" className="bg-primary text-white py-2 px-4 rounded hover:bg-secondary transition w-full">
             Sign Up

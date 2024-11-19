@@ -5,9 +5,14 @@ const CustomerSignup = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phoneNumber: '',
     password: '',
-    role: 'customer', // Role to differentiate sign-up type
+    confirmPassword: '',
+    role: 'customer',
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,11 +21,15 @@ const CustomerSignup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match.');
+      return;
+    }
+
     try {
-      const response = await axios.post('/api/v1/auth/register', formData); // Backend endpoint for registration
-      alert('Customer sign-up successful!');
+      const response = await axios.post('/api/v1/auth/register', formData);
+      alert('Customer sign-up successful! Please verify your phone number or email.');
       console.log(response.data);
-      // Redirect to login or another page after successful sign-up
     } catch (error) {
       console.error('Customer sign-up error:', error.response?.data || error.message);
       alert('Customer sign-up failed. Please try again.');
@@ -55,15 +64,55 @@ const CustomerSignup = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Password</label>
+            <label className="block text-gray-700">Phone Number</label>
             <input
-              type="password"
-              name="password"
-              value={formData.password}
+              type="tel"
+              name="phoneNumber"
+              value={formData.phoneNumber}
               onChange={handleChange}
               className="w-full p-2 border rounded"
               required
             />
+          </div>
+          <div>
+            <label className="block text-gray-700">Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-2 text-gray-600"
+              >
+                {showPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="block text-gray-700">Confirm Password</label>
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-2 top-2 text-gray-600"
+              >
+                {showConfirmPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
           </div>
           <button type="submit" className="bg-primary text-white py-2 px-4 rounded hover:bg-secondary transition w-full">
             Sign Up
