@@ -42,6 +42,7 @@ async (token: string, tokenSecret: string, profile: any, done: any) => {
         googleId: profile.id,
         email: profile.emails?.[0].value,
         username: profile.displayName || "Anonymous",
+        emailVerifies: profile.emailVerified
       });
 
       await user.save();

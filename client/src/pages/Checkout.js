@@ -1,6 +1,6 @@
 // src/pages/Checkout.js
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 
 const Checkout = () => {
   // Mock order details for display (in production, fetch from state or API)
