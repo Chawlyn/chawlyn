@@ -10,10 +10,10 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
 import OrderTracking from './pages/OrderTracking';
-import CustomerProfile from './pages/CustomerProfile';
-import OrderDetail from './pages/OrderDetail';
-import CustomerReviews from './pages/CustomerReviews'; // Import CustomerReviews component
-
+import OrderHistory from './pages/OrderHistory';
+import CustomerDashboard from './pages/CustomerDashboard';
+import CustomerReviews from './pages/CustomerReviews';
+import Login from './pages/Login';
 import Navbar from './components/Navbar';
 
 function App() {
@@ -21,23 +21,29 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
+        {/* Core Pages */}
         <Route path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
+        <Route path="/login" element={<Login />} />
+
+        {/* Sign Up Pages */}
         <Route path="/vendor-signup" element={<VendorSignup />} />
         <Route path="/customer-signup" element={<CustomerSignup />} />
+
+        {/* Dashboard and Detail Pages */}
+        <Route path="/customer-dashboard" element={<CustomerDashboard />} />
         <Route path="/vendors/:vendorId" element={<VendorDetail />} />
         <Route path="/items/:itemId" element={<FoodItemDetail />} />
+
+        {/* Cart and Checkout Pages */}
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/order-tracking" element={<OrderTracking />} />
-        
-        {/* Customer Profile and Order History Routes */}
-        <Route path="/profile" element={<CustomerProfile />} /> 
-        <Route path="/order/:orderId" element={<OrderDetail />} />
+        <Route path="/order-history" element={<OrderHistory />} />
 
-        {/* Customer Reviews Route */}
-        <Route path="/reviews" element={<CustomerReviews />} /> {/* Customer Reviews Page */}
+        {/* Reviews Page */}
+        <Route path="/reviews" element={<CustomerReviews />} />
       </Routes>
     </Router>
   );
