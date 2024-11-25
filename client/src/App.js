@@ -13,6 +13,7 @@ import OrderTracking from './pages/OrderTracking';
 import OrderHistory from './pages/OrderHistory';
 import CustomerDashboard from './pages/CustomerDashboard';
 import CustomerReviews from './pages/CustomerReviews';
+import VendorDashboard from './pages/VendorDashboard'; // Import VendorDashboard
 import Login from './pages/Login';
 import Navbar from './components/Navbar';
 
@@ -32,6 +33,7 @@ function App() {
 
         {/* Dashboard and Detail Pages */}
         <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+        <Route path="/vendor-dashboard" element={<VendorDashboard />} /> {/* Vendor Dashboard */}
         <Route path="/vendors/:vendorId" element={<VendorDetail />} />
         <Route path="/items/:itemId" element={<FoodItemDetail />} />
 
