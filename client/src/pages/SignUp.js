@@ -6,7 +6,7 @@ const SignUp = () => {
     name: '',
     email: '',
     password: '',
-    role: 'customer', // Default role, can be 'vendor' if using dropdown
+    role: 'customer', // Default role
   });
 
   const handleChange = (e) => {
@@ -17,10 +17,13 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/auth/signup', formData); // Replace with actual backend URL
+      const response = await axios.post(
+        'https://food-ordering-backend-q7f0.onrender.com/api/v1/auth/register',
+        formData
+      );
       alert('Sign up successful!');
-      console.log(response.data);
-      // Redirect to login page or other action after successful signup
+      console.log('Response:', response.data);
+      // Redirect to login or another page if needed
     } catch (error) {
       console.error('Sign up error:', error.response?.data || error.message);
       alert('Sign up failed. Please try again.');
@@ -28,10 +31,11 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-background">
+    <div className="flex justify-center items-center min-h-screen bg-background p-4">
       <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-primary mb-4 text-center">Sign Up</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name Field */}
           <div>
             <label className="block text-gray-700">Name</label>
             <input
@@ -40,9 +44,12 @@ const SignUp = () => {
               value={formData.name}
               onChange={handleChange}
               className="w-full p-2 border rounded"
+              placeholder="Enter your full name"
               required
             />
           </div>
+
+          {/* Email Field */}
           <div>
             <label className="block text-gray-700">Email</label>
             <input
@@ -51,9 +58,12 @@ const SignUp = () => {
               value={formData.email}
               onChange={handleChange}
               className="w-full p-2 border rounded"
+              placeholder="Enter your email address"
               required
             />
           </div>
+
+          {/* Password Field */}
           <div>
             <label className="block text-gray-700">Password</label>
             <input
@@ -62,10 +72,31 @@ const SignUp = () => {
               value={formData.password}
               onChange={handleChange}
               className="w-full p-2 border rounded"
+              placeholder="Enter a secure password"
               required
             />
           </div>
-          <button type="submit" className="bg-primary text-white py-2 px-4 rounded hover:bg-secondary transition w-full">
+
+          {/* Role Selection */}
+          <div>
+            <label className="block text-gray-700">Sign Up As</label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full p-2 border rounded bg-white"
+              required
+            >
+              <option value="customer">Customer</option>
+              <option value="vendor">Vendor</option>
+            </select>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="bg-primary text-white py-2 px-4 rounded hover:bg-secondary transition w-full"
+          >
             Sign Up
           </button>
         </form>
