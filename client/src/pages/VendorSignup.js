@@ -7,13 +7,13 @@ const VendorSignup = () => {
 
   const [formData, setFormData] = useState({
     businessName: '',
-    businessType: '', // Added businessType field
-    address: '', // Changed from businessAddress to address (matches API)
+    businessType: '',
+    address: '',
     name: '',
     email: '',
     phoneNumber: '',
     password: '',
-    confirmPassword: '',
+    confirmPassword: '', // Still in the form, but removed before sending
     role: 'vendor',
   });
 
@@ -28,17 +28,20 @@ const VendorSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if passwords match
+    // Check if passwords match before sending request
     if (formData.password !== formData.confirmPassword) {
       alert('Passwords do not match. Please check and try again.');
       return;
     }
 
     try {
+      // Remove confirmPassword before sending to backend
+      const { confirmPassword, ...dataToSend } = formData;
+
       // API request to backend
       const response = await axios.post(
         'https://chaw-republic-backend.onrender.com/api/v1/vendor/register',
-        formData
+        dataToSend
       );
 
       console.log('Server Response:', response.data);
@@ -91,7 +94,7 @@ const VendorSignup = () => {
             <label className="block text-gray-700">Business Address</label>
             <input
               type="text"
-              name="address" // Fixed field name
+              name="address"
               value={formData.address}
               onChange={handleChange}
               className="w-full p-2 border rounded"
