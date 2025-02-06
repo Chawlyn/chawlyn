@@ -36,7 +36,7 @@ const CustomerSignup = () => {
     try {
       // API request to backend
       const response = await axios.post(
-        'https://food-ordering-backend-q7f0.onrender.com/api/v1/auth/register',
+        'https://chaw-republic-backend.onrender.com/api/v1/auth/register',
         formData
       );
 

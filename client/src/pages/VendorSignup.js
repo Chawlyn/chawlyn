@@ -7,13 +7,14 @@ const VendorSignup = () => {
 
   const [formData, setFormData] = useState({
     businessName: '',
-    businessAddress: '',
+    businessType: '', // Added businessType field
+    address: '', // Changed from businessAddress to address (matches API)
     name: '',
     email: '',
     phoneNumber: '',
     password: '',
     confirmPassword: '',
-    role: 'vendor', // Fixed role for vendor
+    role: 'vendor',
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +37,7 @@ const VendorSignup = () => {
     try {
       // API request to backend
       const response = await axios.post(
-        'https://food-ordering-backend-q7f0.onrender.com/api/v1/auth/register',
+        'https://chaw-republic-backend.onrender.com/api/v1/vendor/register',
         formData
       );
 
@@ -68,13 +69,30 @@ const VendorSignup = () => {
             />
           </div>
 
+          {/* Business Type Field */}
+          <div>
+            <label className="block text-gray-700">Business Type</label>
+            <select
+              name="businessType"
+              value={formData.businessType}
+              onChange={handleChange}
+              className="w-full p-2 border rounded bg-white"
+              required
+            >
+              <option value="">Select Business Type</option>
+              <option value="restaurant">Restaurant</option>
+              <option value="fast_food">Fast Food</option>
+              <option value="local_cuisine">Local Cuisine</option>
+            </select>
+          </div>
+
           {/* Business Address Field */}
           <div>
             <label className="block text-gray-700">Business Address</label>
             <input
               type="text"
-              name="businessAddress"
-              value={formData.businessAddress}
+              name="address" // Fixed field name
+              value={formData.address}
               onChange={handleChange}
               className="w-full p-2 border rounded"
               placeholder="Enter your business address"
