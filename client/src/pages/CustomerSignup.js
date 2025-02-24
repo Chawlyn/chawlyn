@@ -11,7 +11,6 @@ const CustomerSignup = () => {
     phoneNumber: '',
     password: '',
     confirmPassword: '',
-    role: 'customer', // Role is fixed as 'customer' for this signup page
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -33,14 +32,19 @@ const CustomerSignup = () => {
       return;
     }
 
+    // Remove confirmPassword before sending to backend
+    const { confirmPassword, ...dataToSend } = formData;
+
     try {
       // API request to backend
       const response = await axios.post(
-        'https://chaw-republic-backend.onrender.com/api/v1/auth/register',
-        formData
+        'https://chaw-republic-backend.onrender.com/api/v1/customer/register',
+        dataToSend
       );
 
       console.log('Server Response:', response.data);
+      alert('Customer registration successful! Redirecting to dashboard...');
+
       // Redirect to Customer Dashboard after successful signup
       navigate('/customer-dashboard');
     } catch (error) {
