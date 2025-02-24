@@ -7,14 +7,12 @@ const VendorSignup = () => {
 
   const [formData, setFormData] = useState({
     businessName: '',
-    businessType: '',
-    address: '',
+    businessAddress: '',
     name: '',
     email: '',
     phoneNumber: '',
     password: '',
-    confirmPassword: '', // Still in the form, but removed before sending
-    role: 'vendor',
+    confirmPassword: '',
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -34,14 +32,14 @@ const VendorSignup = () => {
       return;
     }
 
-    try {
-      // Remove confirmPassword before sending to backend
-      const { confirmPassword, ...dataToSend } = formData;
+    // Create a new object without confirmPassword before sending to backend
+    const { confirmPassword, ...dataToSend } = formData;
 
+    try {
       // API request to backend
       const response = await axios.post(
         'https://chaw-republic-backend.onrender.com/api/v1/vendor/register',
-        dataToSend
+        dataToSend // Send data without confirmPassword
       );
 
       console.log('Server Response:', response.data);
@@ -72,30 +70,13 @@ const VendorSignup = () => {
             />
           </div>
 
-          {/* Business Type Field */}
-          <div>
-            <label className="block text-gray-700">Business Type</label>
-            <select
-              name="businessType"
-              value={formData.businessType}
-              onChange={handleChange}
-              className="w-full p-2 border rounded bg-white"
-              required
-            >
-              <option value="">Select Business Type</option>
-              <option value="restaurant">Restaurant</option>
-              <option value="fast_food">Fast Food</option>
-              <option value="local_cuisine">Local Cuisine</option>
-            </select>
-          </div>
-
           {/* Business Address Field */}
           <div>
             <label className="block text-gray-700">Business Address</label>
             <input
               type="text"
-              name="address"
-              value={formData.address}
+              name="businessAddress"
+              value={formData.businessAddress}
               onChange={handleChange}
               className="w-full p-2 border rounded"
               placeholder="Enter your business address"
