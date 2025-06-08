@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ToastProvider } from './context/ToastContext';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
 import VendorSignup from './pages/VendorSignup';
@@ -15,55 +16,59 @@ import CustomerDashboard from './pages/CustomerDashboard';
 import CustomerReviews from './pages/CustomerReviews';
 import VendorDashboard from './pages/VendorDashboard';
 import Login from './pages/Login';
-import VerifyOTP from './pages/VerifyOTP'; // ✅ Import VerifyOTP page
-import ForgotPassword from './pages/ForgotPassword'; // Import the new page
-import ResendOTP from './pages/ResendOTP'; // ✅ Import ResendOTP page
-import ResetPassword from './pages/ResetPassword'; // ✅ Import ResetPassword page
+import VerifyOTP from './pages/VerifyOTP';
+import ForgotPassword from './pages/ForgotPassword';
+import ResendOTP from './pages/ResendOTP';
+import ResetPassword from './pages/ResetPassword';
 import Navbar from './components/Navbar';
-
+import BottomNav from './components/BottomNav';
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        {/* Core Pages */}
-        <Route path="/" element={<Home />} />
-        <Route path="/explore" element={<Explore />} />
-        <Route path="/login" element={<Login />} />
+    <ToastProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-50">
+          <Navbar />
+          <main className="container mx-auto px-4 py-8 pb-20 md:pb-8">
+            <Routes>
+              {/* Core Pages */}
+              <Route path="/" element={<Home />} />
+              <Route path="/explore" element={<Explore />} />
+              <Route path="/login" element={<Login />} />
 
-        {/* Sign Up Pages */}
-        <Route path="/vendor-signup" element={<VendorSignup />} />
-        <Route path="/customer-signup" element={<CustomerSignup />} />
+              {/* Sign Up Pages */}
+              <Route path="/vendor-signup" element={<VendorSignup />} />
+              <Route path="/customer-signup" element={<CustomerSignup />} />
 
-        {/* Dashboard and Detail Pages */}
-        <Route path="/customer-dashboard" element={<CustomerDashboard />} />
-        <Route path="/vendor-dashboard" element={<VendorDashboard />} />
-        <Route path="/vendors/:vendorId" element={<VendorDetail />} />
-        <Route path="/items/:itemId" element={<FoodItemDetail />} />
+              {/* Dashboard and Detail Pages */}
+              <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+              <Route path="/vendor-dashboard" element={<VendorDashboard />} />
+              <Route path="/vendors/:vendorId" element={<VendorDetail />} />
+              <Route path="/items/:itemId" element={<FoodItemDetail />} />
 
-        {/* Cart and Checkout Pages */}
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/order-confirmation" element={<OrderConfirmation />} />
-        <Route path="/order-tracking" element={<OrderTracking />} />
-        <Route path="/order-history" element={<OrderHistory />} />
+              {/* Cart and Checkout Pages */}
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-confirmation" element={<OrderConfirmation />} />
+              <Route path="/order-tracking" element={<OrderTracking />} />
+              <Route path="/order-history" element={<OrderHistory />} />
 
+              {/* forgot password page */}
+              <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        
-        {/* forgot paswword page */}
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+              {/* Reviews Page */}
+              <Route path="/reviews" element={<CustomerReviews />} />
 
-
-        {/* Reviews Page */}
-        <Route path="/reviews" element={<CustomerReviews />} />
-
-        {/* ✅ New OTP & Password Reset Pages */}
-        <Route path="/verify-otp" element={<VerifyOTP />} />
-        <Route path="/resend-otp" element={<ResendOTP />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-      </Routes>
-    </Router>
+              {/* OTP & Password Reset Pages */}
+              <Route path="/verify-otp" element={<VerifyOTP />} />
+              <Route path="/resend-otp" element={<ResendOTP />} />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
+            </Routes>
+          </main>
+          <BottomNav />
+        </div>
+      </Router>
+    </ToastProvider>
   );
 }
 
