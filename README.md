@@ -1,13 +1,76 @@
-This project is a web-based platform developed to connect food vendors with customers, offering a seamless ordering and delivery experience in a single marketplace. Key functionalities include:
+# Chawlyn - Multi-vendor Food Ordering Platform
 
-Vendor Registration and Management: Vendors can create profiles, upload menus with descriptions and prices, and manage orders.
-Customer Registration and Ordering: Customers can browse vendors, view menus, and place orders directly through the app.
-Real-Time Order Tracking: Integrated with third-party delivery APIs to track food deliveries in real-time.
-Rating and Review System: Allows customers to review vendors and rate their experiences.
-Admin Panel: Enables app administrators to manage vendors, monitor orders, and handle customer service.
-Technology Stack:
+A modern food ordering platform built with React, featuring a multi-vendor marketplace where customers can order from various restaurants and vendors.
 
-Frontend: React.js with Tailwind CSS for styling
-Backend: Node.js with Express.js for API management
-Database: MongoDB for storing user data, menus, and orders
-Other Tools: Axios for API requests, React Router for navigation, and GitHub for version control.
+## Features
+
+- 🍽️ Multi-vendor marketplace
+- 📱 Responsive design for mobile and desktop
+- 🔍 Advanced search and filtering
+- 🛒 Shopping cart functionality
+- 📊 Vendor and customer dashboards
+- 🔐 Secure authentication
+- 📦 Real-time order tracking
+- ⭐ Rating and review system
+
+## Tech Stack
+
+- React.js
+- React Router
+- Tailwind CSS
+- Framer Motion
+- React Hot Toast
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/chawlyn.git
+cd chawlyn
+```
+
+2. Install dependencies:
+```bash
+cd client
+npm install
+```
+
+3. Start the development server:
+```bash
+npm start
+```
+
+The application will be available at `http://localhost:3000`.
+
+## Project Structure
+
+```
+chawlyn/
+├── client/                 # Frontend React application
+│   ├── public/            # Static files
+│   └── src/               # Source files
+│       ├── components/    # Reusable components
+│       ├── pages/         # Page components
+│       ├── context/       # React context
+│       └── utils/         # Utility functions
+└── server/                # Backend server (coming soon)
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

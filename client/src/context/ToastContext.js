@@ -1,33 +1,7 @@
-import React, { createContext, useContext, useState } from 'react';
-import Toast from '../components/Toast';
+import React, { createContext, useContext } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 const ToastContext = createContext();
-
-export const ToastProvider = ({ children }) => {
-  const [toast, setToast] = useState(null);
-
-  const showToast = (message, type = 'success', duration = 3000) => {
-    setToast({ message, type, duration });
-  };
-
-  const hideToast = () => {
-    setToast(null);
-  };
-
-  return (
-    <ToastContext.Provider value={{ showToast }}>
-      {children}
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          duration={toast.duration}
-          onClose={hideToast}
-        />
-      )}
-    </ToastContext.Provider>
-  );
-};
 
 export const useToast = () => {
   const context = useContext(ToastContext);
@@ -35,4 +9,53 @@ export const useToast = () => {
     throw new Error('useToast must be used within a ToastProvider');
   }
   return context;
+};
+
+export const ToastProvider = ({ children }) => {
+  const showToast = (message, type = 'success') => {
+    switch (type) {
+      case 'success':
+        toast.success(message, {
+          duration: 4000,
+          position: 'top-right',
+          style: {
+            background: '#10B981',
+            color: '#fff',
+          },
+        });
+        break;
+      case 'error':
+        toast.error(message, {
+          duration: 4000,
+          position: 'top-right',
+          style: {
+            background: '#EF4444',
+            color: '#fff',
+          },
+        });
+        break;
+      case 'loading':
+        toast.loading(message, {
+          duration: 4000,
+          position: 'top-right',
+          style: {
+            background: '#3B82F6',
+            color: '#fff',
+          },
+        });
+        break;
+      default:
+        toast(message, {
+          duration: 4000,
+          position: 'top-right',
+        });
+    }
+  };
+
+  return (
+    <ToastContext.Provider value={{ showToast }}>
+      {children}
+      <Toaster />
+    </ToastContext.Provider>
+  );
 }; 
