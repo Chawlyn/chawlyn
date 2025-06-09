@@ -45,7 +45,7 @@ const Cart = () => {
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">{item.name}</h2>
                   <p className="text-gray-600">{item.vendor}</p>
-                  <p className="text-green-600 font-semibold">${item.price.toFixed(2)}</p>
+                  <p className="text-green-600 font-semibold">₦{item.price.toFixed(2)}</p>
                 </div>
               </div>
               <div className="flex flex-col items-end">
@@ -66,7 +66,7 @@ const Cart = () => {
                   </button>
                 </div>
                 <p className="text-gray-800 font-semibold">
-                  Subtotal: ${(item.price * item.quantity).toFixed(2)}
+                  Subtotal: ₦{(item.price * item.quantity).toFixed(2)}
                 </p>
                 <button
                   onClick={() => removeFromCart(item.id)}
@@ -84,9 +84,9 @@ const Cart = () => {
       <div className="w-full md:w-1/4 bg-white p-6 rounded-lg shadow-md mt-6 md:mt-0 md:ml-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Order Summary</h2>
         <div className="mb-4">
-          <p className="text-lg">Subtotal: ${getCartTotal().toFixed(2)}</p>
-          <p className="text-lg">Discount: ${discount.toFixed(2)}</p>
-          <p className="text-2xl font-bold mt-2">Total: ${calculateTotalPrice().toFixed(2)}</p>
+          <p className="text-lg">Subtotal: ₦{getCartTotal().toFixed(2)}</p>
+          <p className="text-lg">Discount: ₦{discount.toFixed(2)}</p>
+          <p className="text-2xl font-bold mt-2">Total: ₦{calculateTotalPrice().toFixed(2)}</p>
         </div>
         <div className="mb-4">
           <input

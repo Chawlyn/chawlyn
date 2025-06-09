@@ -15,9 +15,9 @@ const VendorDetail = () => {
     location: "123 Foodie Street, Port Harcourt",
     rating: 4.8,
     menu: [
-      { id: 1, name: 'Jollof Rice', description: 'Spicy and flavorful', price: 8.99 },
-      { id: 2, name: 'Fried Plantains', description: 'Golden and crispy', price: 4.99 },
-      { id: 3, name: 'Egusi Soup', description: 'Delicious and hearty', price: 10.99 },
+      { id: 1, name: 'Jollof Rice', description: 'Spicy and flavorful', price: 8990 },
+      { id: 2, name: 'Fried Plantains', description: 'Golden and crispy', price: 4990 },
+      { id: 3, name: 'Egusi Soup', description: 'Delicious and hearty', price: 10990 },
     ],
     reviews: [
       { id: 1, user: 'John Doe', rating: 5, comment: 'Amazing food!' },
