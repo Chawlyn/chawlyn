@@ -12,6 +12,7 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
+    "concurrently": "^9.1.2",
     "framer-motion": "^12.5.0",
     "react-hot-toast": "^2.5.2"
   }

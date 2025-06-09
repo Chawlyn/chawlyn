@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { ToastProvider } from './context/ToastContext';
+import { CartProvider } from './context/CartContext';
 import { AnimatePresence } from 'framer-motion';
 import Home from './pages/Home';
 import Explore from './pages/Explore';
@@ -70,15 +71,17 @@ function App() {
   return (
     <Router>
       <ToastProvider>
-        <AnimatePresence mode="wait">
-          <div className="min-h-screen bg-gray-50">
-            <Navbar />
-            <main className="container mx-auto px-4 py-8 pb-20 md:pb-8">
-              <AnimatedRoutes />
-            </main>
-            <BottomNav />
-          </div>
-        </AnimatePresence>
+        <CartProvider>
+          <AnimatePresence mode="wait">
+            <div className="min-h-screen bg-gray-50">
+              <Navbar />
+              <main className="container mx-auto px-4 py-8 pb-20 md:pb-8">
+                <AnimatedRoutes />
+              </main>
+              <BottomNav />
+            </div>
+          </AnimatePresence>
+        </CartProvider>
       </ToastProvider>
     </Router>
   );

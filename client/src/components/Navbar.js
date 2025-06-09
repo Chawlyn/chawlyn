@@ -1,28 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import MobileNav from './MobileNav';
+import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
-  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState('Port Harcourt');
-  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-
-  // Port Harcourt areas
-  const locations = [
-    'Port Harcourt',
-    'GRA',
-    'Rumuokoro',
-    'Rumuola',
-    'Rumuomasi',
-    'Trans-Amadi',
-    'D/Line',
-    'Borokiri',
-    'Abuloma',
-    'Woji'
-  ];
+  const { getCartCount } = useCart();
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Check authentication status on component mount
   useEffect(() => {
@@ -43,149 +30,109 @@ const Navbar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Implement search functionality
     navigate(`/explore?search=${searchQuery}`);
   };
 
-  return (
-    <nav className="bg-gradient-primary shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col py-4">
-          {/* Top Bar - Logo and Auth */}
-          <div className="flex justify-between items-center mb-4">
-            <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-white text-2xl font-bold">Chaw Republic</span>
-            </Link>
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              <Link 
-                to="/explore" 
-                className="text-white hover:text-accent transition-colors duration-200"
-                aria-label="Explore food items"
-              >
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  return (
+    <nav className="bg-gradient-primary text-white shadow-md">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-2">
+            <span className="text-2xl font-bold">Chaw Republic</span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-6">
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} className="relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for food..."
+                className="w-64 px-4 py-2 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-nigerianYellow"
+              />
+              <button type="submit" className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+            </form>
+
+            {/* Desktop Menu Items */}
+            <div className="flex items-center space-x-6">
+              <Link to="/explore" className="hover:text-nigerianYellow transition-colors duration-200">
                 Explore
               </Link>
-              
+              <Link 
+                to="/cart" 
+                className="hover:text-nigerianYellow transition-colors duration-200 flex items-center relative"
+              >
+                <svg className="w-6 h-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Cart
+                {getCartCount() > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-nigerianOrange text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {getCartCount()}
+                  </span>
+                )}
+              </Link>
               {isAuthenticated ? (
-                <>
-                  <Link 
-                    to="/cart" 
-                    className="text-white hover:text-nigerianYellow transition-colors duration-200 flex items-center"
-                  >
-                    <svg className="w-6 h-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    Cart
-                  </Link>
-                  <Link 
-                    to={userRole === 'vendor' ? '/vendor-dashboard' : '/customer-dashboard'}
-                    className="text-white hover:text-nigerianYellow transition-colors duration-200"
-                  >
-                    Dashboard
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="text-white hover:text-nigerianYellow transition-colors duration-200"
-                  >
-                    Logout
-                  </button>
-                </>
+                <Link
+                  to="/customer-dashboard"
+                  className="hover:text-nigerianYellow transition-colors duration-200"
+                >
+                  Profile
+                </Link>
               ) : (
                 <div className="flex items-center space-x-4">
                   <Link
                     to="/customer-signup"
-                    className="text-white hover:text-nigerianYellow transition-colors duration-200 flex items-center"
+                    className="hover:text-nigerianYellow transition-colors duration-200"
                   >
-                    <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    Sign Up as Customer
+                    Sign Up
                   </Link>
                   <Link
                     to="/vendor-signup"
-                    className="text-white hover:text-nigerianYellow transition-colors duration-200 flex items-center"
+                    className="hover:text-nigerianYellow transition-colors duration-200"
                   >
-                    <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                    Sign Up as Vendor
+                    Become a Vendor
                   </Link>
                   <Link
                     to="/login"
-                    className="bg-nigerianYellow text-nigerianBrown px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors duration-200 flex items-center"
+                    className="hover:text-nigerianYellow transition-colors duration-200"
                   >
-                    <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                    </svg>
                     Login
                   </Link>
                 </div>
               )}
             </div>
-
-            {/* Mobile Navigation */}
-            <div className="md:hidden flex items-center">
-              <MobileNav isAuthenticated={isAuthenticated} userRole={userRole} onLogout={handleLogout} />
-            </div>
           </div>
 
-          {/* Search and Location Bar */}
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Location Selector */}
-            <div className="relative">
-              <button
-                onClick={() => setShowLocationDropdown(!showLocationDropdown)}
-                className="flex items-center space-x-2 bg-white px-4 py-2 rounded-md w-full md:w-48"
-              >
-                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span className="text-gray-700">{selectedLocation}</span>
-              </button>
-              
-              {showLocationDropdown && (
-                <div className="absolute z-50 mt-2 w-full bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
-                  {locations.map((location) => (
-                    <button
-                      key={location}
-                      onClick={() => {
-                        setSelectedLocation(location);
-                        setShowLocationDropdown(false);
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      {location}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="flex-1">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search for food, restaurants, or cuisines..."
-                  className="w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-nigerianYellow"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-nigerianBrown"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </button>
-              </div>
-            </form>
-          </div>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={toggleMenu}
+            className="md:hidden text-white hover:text-nigerianYellow transition-colors duration-200"
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
         </div>
       </div>
+
+      {/* Mobile Navigation */}
+      <MobileNav isOpen={isMenuOpen} onClose={closeMenu} />
     </nav>
   );
 };
